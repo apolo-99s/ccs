@@ -1,9 +1,15 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+} from "react-router-dom";
 import { AuthProvider, useAuth } from "../features/auth/AuthProvider";
+import { DashboardPage } from "../pages/DashboardPage";
 import { LandingPage } from "../pages/LandingPage";
 import { LoginPage } from "../pages/LoginPage";
 import { RegisterPage } from "../pages/RegisterPage";
-import { DashboardPage } from "../pages/DashboardPage";
 import { SessionsPage } from "../pages/SessionsPage";
 
 function ProtectedRoute() {
