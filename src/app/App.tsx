@@ -13,7 +13,7 @@ function ProtectedRoute() {
     return <main className="center">Loading…</main>;
   }
 
-  return user ? <DashboardPage /> : <Navigate to="/login" replace />;
+  return user ? <Outlet /> : <Navigate to="/login" replace />;
 }
 
 function AppRoutes() {
@@ -22,8 +22,12 @@ function AppRoutes() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/dashboard" element={<ProtectedRoute />} />
-      <Route path="/sessions" element={<SessionsPage />} />
+
+      <Route element={<ProtectedRoute />}>
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/sessions" element={<SessionsPage />} />
+      </Route>
+
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
