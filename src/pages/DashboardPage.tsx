@@ -92,7 +92,9 @@ export function DashboardPage() {
         <div className="dashboard-heading">
           <div>
             <p className="eyebrow">Host workspace</p>
+
             <h1>Your private rooms</h1>
+
             <p className="lead">
               Create rooms that will contain your private conferencing
               sessions.
@@ -152,7 +154,9 @@ export function DashboardPage() {
         ) : rooms.length === 0 ? (
           <div className="empty-card">
             <div className="empty-icon">＋</div>
+
             <h2>No rooms yet</h2>
+
             <p>Create your first private room to begin organizing sessions.</p>
 
             {!showForm && (
@@ -164,3 +168,34 @@ export function DashboardPage() {
                 Create your first room
               </button>
             )}
+          </div>
+        ) : (
+          <div className="room-grid">
+            {rooms.map((room) => (
+              <article className="room-card" key={room.id}>
+                <span className="status-badge">{room.status}</span>
+
+                <h2>{room.name}</h2>
+
+                <p>{room.description || "No description provided."}</p>
+
+                <small>
+                  Created {new Date(room.created_at).toLocaleDateString()}
+                </small>
+
+                <Link
+                  to={`/sessions?room=${encodeURIComponent(room.id)}`}
+                  className="button room-action"
+                >
+                  Manage sessions
+                </Link>
+              </article>
+            ))}
+          </div>
+        )}
+
+        <small>Signed in as {user?.email}</small>
+      </section>
+    </main>
+  );
+}
