@@ -214,7 +214,10 @@ nav {
     padding: 10vh 7vw;
   }
 
-  .hero h1
+  .hero h1 {
+    font-size: 3.5rem;
+  }
+}
   
 .error {
   margin: 0;
