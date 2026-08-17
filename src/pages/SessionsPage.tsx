@@ -1,7 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
-  createRoom,
   listRooms,
   type Room,
 } from "../features/rooms/roomService";
@@ -15,11 +14,11 @@ export function SessionsPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const selectedRoomId = searchParams.get("room");
+  const roomFromUrl = searchParams.get("room");
 
   const [rooms, setRooms] = useState<Room[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
-  const [roomId, setRoomId] = useState(selectedRoomId ?? "");
+  const [roomId, setRoomId] = useState(roomFromUrl ?? "");
   const [title, setTitle] = useState("");
   const [startsAt, setStartsAt] = useState("");
   const [loading, setLoading] = useState(true);
@@ -29,11 +28,16 @@ export function SessionsPage() {
   useEffect(() => {
     async function loadRooms() {
       try {
+        setError("");
+
         const roomData = await listRooms();
         setRooms(roomData);
 
-        if (!roomId && roomData.length > 0) {
-          setRoomId(roomData[0].id);
+        const preferredRoom =
+          roomData.find((room) => room.id === roomFromUrl) ?? roomData[0];
+
+        if (preferredRoom) {
+          setRoomId(preferredRoom.id);
         }
       } catch (loadError) {
         setError(
@@ -47,7 +51,7 @@ export function SessionsPage() {
     }
 
     void loadRooms();
-  }, [roomId]);
+  }, [roomFromUrl]);
 
   useEffect(() => {
     if (!roomId) {
@@ -57,6 +61,7 @@ export function SessionsPage() {
 
     async function loadSessions() {
       try {
+        setError("");
         const data = await listSessions(roomId);
         setSessions(data);
       } catch (loadError) {
@@ -126,7 +131,9 @@ export function SessionsPage() {
 
       <section className="dashboard">
         <p className="eyebrow">Session management</p>
+
         <h1>Private sessions</h1>
+
         <p className="lead">
           Create scheduled or draft sessions inside your private rooms.
         </p>
@@ -135,6 +142,7 @@ export function SessionsPage() {
           <div className="empty-card">
             <h2>Create a room first</h2>
             <p>A session must belong to a private room.</p>
+
             <Link to="/dashboard" className="button">
               Go to rooms
             </Link>
@@ -146,8 +154,9 @@ export function SessionsPage() {
               <select
                 value={roomId}
                 onChange={(event) => {
-                  setRoomId(event.target.value);
-                  navigate(`/sessions?room=${event.target.value}`);
+                  const nextRoomId = event.target.value;
+                  setRoomId(nextRoomId);
+                  navigate(`/sessions?room=${encodeURIComponent(nextRoomId)}`);
                 }}
               >
                 {rooms.map((room) => (
@@ -198,7 +207,9 @@ export function SessionsPage() {
                 {sessions.map((session) => (
                   <article className="room-card" key={session.id}>
                     <span className="status-badge">{session.status}</span>
+
                     <h2>{session.title}</h2>
+
                     <p>
                       {session.starts_at
                         ? new Date(session.starts_at).toLocaleString()
