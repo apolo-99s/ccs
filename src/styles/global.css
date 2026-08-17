@@ -355,3 +355,9 @@ nav {
     padding: 22px;
   }
 }
+.room-action {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+}
