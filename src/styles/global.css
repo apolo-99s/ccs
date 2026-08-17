@@ -215,3 +215,37 @@ nav {
   }
 
   .hero h1
+  
+.error {
+  margin: 0;
+  color: #b23b32 !important;
+}
+
+.success {
+  margin: 0;
+  color: #28734c !important;
+}
+
+.ghost {
+  border: 1px solid #ced8d2;
+  border-radius: 8px;
+  padding: 9px 15px;
+  background: transparent;
+  color: #17221f;
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.app-shell header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.center {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+}
